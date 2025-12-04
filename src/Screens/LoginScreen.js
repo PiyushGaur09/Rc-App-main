@@ -16,8 +16,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
-  const [email, setEmail] = useState('s.umar.farooq17@gmail.com');
-  const [password, setPassword] = useState('India@123');
+  const [email, setEmail] = useState('');
+  //s.umar.farooq17@gmail.com
+  const [password, setPassword] = useState('');
+
+  // India@123
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -132,7 +135,7 @@ const LoginScreen = ({ navigation }) => {
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.titleContainer}>
-        <Text style={styles.title}>Makroo Motor Corp.</Text>
+        <Text style={styles.title}>Makroo Motors</Text>
       </LinearGradient>
 
       <Text style={styles.subtitle}>Welcome Back</Text>

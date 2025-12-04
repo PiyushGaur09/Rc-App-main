@@ -47,9 +47,7 @@ import Rcinternalpage from '../Screens/Rcinternalpage';
 import Dcinternalpage from '../Screens/Dcinternalpage';
 import Pdiinternalpage from '../Screens/Pdiinternalpage';
 import Deliveryforminternalpage from '../Screens/StockManagement/Deliveryforminternalpage';
-
-
-
+import Splash from '../Screens/Splash';
 
 const Stack = createNativeStackNavigator();
 
@@ -57,6 +55,11 @@ function RootNavigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="Splash"
+          component={Splash}
+          options={{headerShown: false}}
+        />
         <Stack.Screen
           name="LoginScreen"
           component={LoginScreen}
@@ -67,22 +70,22 @@ function RootNavigation() {
           component={Dashboard}
           options={{headerShown: false}}
         />
-          <Stack.Screen
+        <Stack.Screen
           name="Rcpage"
           component={Rcpage}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="Customerspage"
           component={Customerspage}
           options={{headerShown: false}}
         />
-          <Stack.Screen
+        <Stack.Screen
           name="Customerinternalpage"
           component={Customerinternalpage}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="PDIPage"
           component={PDIPage}
           options={{headerShown: false}}
@@ -102,7 +105,7 @@ function RootNavigation() {
           component={Forminternalpage}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="Pdfpage"
           component={Pdfpage}
           options={{headerShown: false}}
@@ -122,24 +125,24 @@ function RootNavigation() {
           component={Overviewinternal}
           options={{headerShown: false}}
         />
-         <Stack.Screen 
+        <Stack.Screen
           screenOptions={{
-    headerShown: false,
-    gestureEnabled: true,
-    gestureDirection: 'horizontal', // left/right swipe
-    animation: 'slide_from_right',
-    animationTypeForReplace: 'pop', // smooth back animation
-  }}
+            headerShown: false,
+            gestureEnabled: true,
+            gestureDirection: 'horizontal', // left/right swipe
+            animation: 'slide_from_right',
+            animationTypeForReplace: 'pop', // smooth back animation
+          }}
           name="Hamburger"
           component={HamburgerPage}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="StockLocation"
           component={StockLocation}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="TransitStatus"
           component={TransitStatus}
           options={{headerShown: false}}
@@ -164,7 +167,7 @@ function RootNavigation() {
           component={AddModel}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="Form"
           component={Form}
           options={{headerShown: false}}
@@ -174,27 +177,27 @@ function RootNavigation() {
           component={StockLocationList}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="ModelDetail"
           component={ModelDetail}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="DepotModelList"
           component={DepotModelList}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="ReportModelList"
           component={ReportModelList}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="FinanceModelList"
           component={FinanceModelList}
           options={{headerShown: false}}
         />
-          <Stack.Screen
+        <Stack.Screen
           name="Signup"
           component={Signup}
           options={{headerShown: false}}
@@ -204,22 +207,22 @@ function RootNavigation() {
           component={Forgetpassword}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="Profile"
           component={Profile}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="GetAllModel"
           component={GetAllModel}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="AllDelivery"
           component={AllDelivery}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="AddModelStocks"
           component={AddModelStocks}
           options={{headerShown: false}}
@@ -234,18 +237,18 @@ function RootNavigation() {
           component={Paymentmanagement}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="Addcustomerpayment"
           component={Addcustomerpayment}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="Customerpaymentdetails"
           component={Customerpaymentdetail}
           options={{headerShown: false}}
         />
-       
-         <Stack.Screen
+
+        <Stack.Screen
           name="Oldtractormanagement"
           component={Oldtractormanagement}
           options={{headerShown: false}}
@@ -285,7 +288,7 @@ function RootNavigation() {
           component={Rcinternalpage}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="Dcinternalpage"
           component={Dcinternalpage}
           options={{headerShown: false}}
@@ -295,7 +298,7 @@ function RootNavigation() {
           component={Pdiinternalpage}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="Deliveryforminternalpage"
           component={Deliveryforminternalpage}
           options={{headerShown: false}}

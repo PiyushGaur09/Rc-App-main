@@ -1,4 +1,4 @@
-// import React, { useState, useEffect } from 'react';
+// import React, {useState, useEffect, useCallback} from 'react';
 // import {
 //   View,
 //   Text,
@@ -12,10 +12,10 @@
 //   Platform,
 //   FlatList,
 //   Modal,
-//   ActivityIndicator
+//   ActivityIndicator,
 // } from 'react-native';
 // import LinearGradient from 'react-native-linear-gradient';
-// import { useSafeAreaInsets } from 'react-native-safe-area-context';
+// import {useSafeAreaInsets} from 'react-native-safe-area-context';
 // import Icon from 'react-native-vector-icons/Feather';
 // import Icon1 from 'react-native-vector-icons/FontAwesome';
 // import Icon2 from 'react-native-vector-icons/MaterialIcons';
@@ -23,19 +23,22 @@
 // import axios from 'axios';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// const { width, height } = Dimensions.get('window');
+// const {width, height} = Dimensions.get('window');
 
 // // Responsive scaling functions
-// const scale = (size) => (width / 375) * size;
-// const verticalScale = (size) => (height / 812) * size;
-// const moderateScale = (size, factor = 0.5) => size + (scale(size) - size) * factor;
+// const scale = size => (width / 375) * size;
+// const verticalScale = size => (height / 812) * size;
+// const moderateScale = (size, factor = 0.5) =>
+//   size + (scale(size) - size) * factor;
 
-// const Addcustomerpayment = ({ navigation, route }) => {
+// const Addcustomerpayment = ({navigation, route}) => {
 //   const insets = useSafeAreaInsets();
 
 //   // Check if we're in edit mode
 //   const isEditMode = route.params?.payment ? true : false;
 //   const paymentData = route.params?.payment || {};
+
+//   console.log('payment Data', paymentData);
 
 //   // State for form fields - matching Customerpaymentdetails structure
 //   const [formData, setFormData] = useState({
@@ -59,13 +62,15 @@
 //     entry_dates: [],
 //     entries_by: [],
 //     amounts: [],
-//     payment_remarks: []
+//     payment_remarks: [],
 //   });
 
 //   // Tractor models from API
 //   const [tractorModels, setTractorModels] = useState([]);
 //   const [loadingTractorModels, setLoadingTractorModels] = useState(false);
-//   const [showTractorModelDropdown, setShowTractorModelDropdown] = useState(false);
+//   const [showTractorModelDropdown, setShowTractorModelDropdown] =
+//     useState(false);
+//   const [hasFetchedTractorModels, setHasFetchedTractorModels] = useState(false);
 
 //   // Payment history states
 //   const [showPaymentHistoryModal, setShowPaymentHistoryModal] = useState(false);
@@ -74,7 +79,7 @@
 //     entry_date: new Date(),
 //     entry_by: '',
 //     amount: '',
-//     payment_remarks: ''
+//     payment_remarks: '',
 //   });
 //   const [showPaymentDatePicker, setShowPaymentDatePicker] = useState(false);
 
@@ -87,18 +92,24 @@
 //   // API Base URL
 //   const API_BASE_URL = 'https://argosmob.uk/makroo/public/api/v1';
 
-//   // Fetch tractor models from API
-//   const fetchTractorModels = async () => {
+//   // Fetch tractor models from API - wrapped in useCallback to prevent recreation
+//   const fetchTractorModels = useCallback(async () => {
+//     // Don't fetch if already fetched
+//     if (hasFetchedTractorModels) {
+//       return;
+//     }
+
 //     try {
 //       setLoadingTractorModels(true);
 //       const response = await axios.get(`${API_BASE_URL}/model/tractor-models`);
 
 //       if (response.data && response.data.data) {
 //         // Extract model names from response
-//         const models = response.data.data.map(item =>
-//           item.name || item.model_name || item.tractor_model || item
+//         const models = response.data.data.map(
+//           item => item.name || item.model_name || item.tractor_model || item,
 //         );
 //         setTractorModels(models);
+//         setHasFetchedTractorModels(true);
 //       } else {
 //         // Fallback to some common models if API fails
 //         setTractorModels([
@@ -109,8 +120,9 @@
 //           'Mahindra 475 DI',
 //           'John Deere 5050D',
 //           'John Deere 5310',
-//           'Eicher 485'
+//           'Eicher 485',
 //         ]);
+//         setHasFetchedTractorModels(true);
 //       }
 //     } catch (error) {
 //       console.log('Error fetching tractor models:', error);
@@ -123,20 +135,21 @@
 //         'Mahindra 475 DI',
 //         'John Deere 5050D',
 //         'John Deere 5310',
-//         'Eicher 485'
+//         'Eicher 485',
 //       ]);
+//       setHasFetchedTractorModels(true);
 //     } finally {
 //       setLoadingTractorModels(false);
 //     }
-//   };
+//   }, [hasFetchedTractorModels]);
 
 //   // Update form data
-//   const updateFormData = (field, value) => {
+//   const updateFormData = useCallback((field, value) => {
 //     setFormData(prev => ({
 //       ...prev,
-//       [field]: value
+//       [field]: value,
 //     }));
-//   };
+//   }, []);
 
 //   // Initialize form with payment data if in edit mode
 //   useEffect(() => {
@@ -147,18 +160,23 @@
 //     if (isInitialized) return;
 
 //     if (isEditMode && paymentData) {
-//       setFormData({
+//       setFormData(prev => ({
+//         ...prev,
 //         id: paymentData.id || '',
 //         user_id: paymentData.user_id || '',
 //         entry_by: paymentData.entry_by || '',
-//         entry_date: paymentData.entry_date ? new Date(paymentData.entry_date) : new Date(),
+//         entry_date: paymentData.entry_date
+//           ? new Date(paymentData.entry_date)
+//           : new Date(),
 //         ledger_no: paymentData.ledger_no || '',
 //         customer_name: paymentData.customer_name || '',
 //         father_name: paymentData.father_name || '',
 //         customer_mobile: paymentData.customer_mobile || '',
 //         customer_address: paymentData.customer_address || '',
 //         tractor_model: paymentData.tractor_model || '',
-//         delivery_date: paymentData.delivery_date ? new Date(paymentData.delivery_date) : new Date(),
+//         delivery_date: paymentData.delivery_date
+//           ? new Date(paymentData.delivery_date)
+//           : new Date(),
 //         chassis_no: paymentData.chassis_no || '',
 //         opening_balance: paymentData.opening_balance || '',
 //         total_paid: paymentData.total_paid || '',
@@ -168,47 +186,53 @@
 //         entry_dates: paymentData.entry_dates || [],
 //         entries_by: paymentData.entries_by || [],
 //         amounts: paymentData.amounts || [],
-//         payment_remarks: paymentData.payment_remarks || []
-//       });
+//         payment_remarks: paymentData.payment_remarks || [],
+//       }));
 //     }
 //     setIsInitialized(true);
-//   }, [isEditMode, paymentData, isInitialized]);
+//   }, [isEditMode, paymentData, isInitialized, fetchTractorModels]);
 
 //   // Date change handlers
-//   const onDateChange = (event, selectedDate) => {
-//     setShowDatePicker(false);
-//     if (selectedDate) {
-//       updateFormData('entry_date', selectedDate);
-//     }
-//   };
+//   const onDateChange = useCallback(
+//     (event, selectedDate) => {
+//       setShowDatePicker(false);
+//       if (selectedDate) {
+//         updateFormData('entry_date', selectedDate);
+//       }
+//     },
+//     [updateFormData],
+//   );
 
-//   const onDeliveryDateChange = (event, selectedDate) => {
-//     setShowDeliveryDatePicker(false);
-//     if (selectedDate) {
-//       updateFormData('delivery_date', selectedDate);
-//     }
-//   };
+//   const onDeliveryDateChange = useCallback(
+//     (event, selectedDate) => {
+//       setShowDeliveryDatePicker(false);
+//       if (selectedDate) {
+//         updateFormData('delivery_date', selectedDate);
+//       }
+//     },
+//     [updateFormData],
+//   );
 
-//   const onPaymentDateChange = (event, selectedDate) => {
+//   const onPaymentDateChange = useCallback((event, selectedDate) => {
 //     setShowPaymentDatePicker(false);
 //     if (selectedDate) {
 //       setNewPaymentHistory(prev => ({
 //         ...prev,
-//         entry_date: selectedDate
+//         entry_date: selectedDate,
 //       }));
 //     }
-//   };
+//   }, []);
 
 //   // Format date for display
-//   const formatDate = (date) => {
+//   const formatDate = useCallback(date => {
 //     if (date instanceof Date) {
 //       return date.toLocaleDateString('en-GB');
 //     }
 //     return date;
-//   };
+//   }, []);
 
 //   // Format date for API (YYYY-MM-DD)
-//   const formatDateForAPI = (date) => {
+//   const formatDateForAPI = useCallback(date => {
 //     if (date instanceof Date) {
 //       const year = date.getFullYear();
 //       const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -216,19 +240,24 @@
 //       return `${year}-${month}-${day}`;
 //     }
 //     return date;
-//   };
+//   }, []);
 
 //   // Calculate remaining payment
-//   const remainingPayment = (parseFloat(formData.opening_balance) || 0) - (parseFloat(formData.total_paid) || 0);
+//   const remainingPayment =
+//     (parseFloat(formData.opening_balance) || 0) -
+//     (parseFloat(formData.total_paid) || 0);
 
 //   // Handle tractor model selection
-//   const handleTractorModelSelect = (model) => {
-//     updateFormData('tractor_model', model);
-//     setShowTractorModelDropdown(false);
-//   };
+//   const handleTractorModelSelect = useCallback(
+//     model => {
+//       updateFormData('tractor_model', model);
+//       setShowTractorModelDropdown(false);
+//     },
+//     [updateFormData],
+//   );
 
 //   // Handle adding new payment history entry
-//   const handleAddPaymentHistory = () => {
+//   const handleAddPaymentHistory = useCallback(() => {
 //     if (!newPaymentHistory.entry_by || !newPaymentHistory.amount) {
 //       Alert.alert('Error', 'Please fill Entry By and Amount fields');
 //       return;
@@ -243,11 +272,17 @@
 //     // Add to form data arrays
 //     setFormData(prev => ({
 //       ...prev,
-//       entry_dates: [...prev.entry_dates, formatDateForAPI(newPaymentHistory.entry_date)],
+//       entry_dates: [
+//         ...prev.entry_dates,
+//         formatDateForAPI(newPaymentHistory.entry_date),
+//       ],
 //       entries_by: [...prev.entries_by, newPaymentHistory.entry_by],
 //       amounts: [...prev.amounts, amount],
-//       payment_remarks: [...prev.payment_remarks, newPaymentHistory.payment_remarks || ''],
-//       total_paid: (parseFloat(prev.total_paid) + amount).toString()
+//       payment_remarks: [
+//         ...prev.payment_remarks,
+//         newPaymentHistory.payment_remarks || '',
+//       ],
+//       total_paid: (parseFloat(prev.total_paid) + amount).toString(),
 //     }));
 
 //     // Reset new payment history form
@@ -255,30 +290,37 @@
 //       entry_date: new Date(),
 //       entry_by: '',
 //       amount: '',
-//       payment_remarks: ''
+//       payment_remarks: '',
 //     });
 
 //     setIsAddingPaymentHistory(false);
-//   };
+//   }, [newPaymentHistory, formatDateForAPI]);
 
 //   // Remove payment history entry
-//   const removePaymentHistoryEntry = (index) => {
-//     const removedAmount = formData.amounts[index];
-
-//     setFormData(prev => ({
-//       ...prev,
-//       entry_dates: prev.entry_dates.filter((_, i) => i !== index),
-//       entries_by: prev.entries_by.filter((_, i) => i !== index),
-//       amounts: prev.amounts.filter((_, i) => i !== index),
-//       payment_remarks: prev.payment_remarks.filter((_, i) => i !== index),
-//       total_paid: (parseFloat(prev.total_paid) - parseFloat(removedAmount)).toString()
-//     }));
-//   };
+//   const removePaymentHistoryEntry = useCallback(index => {
+//     setFormData(prev => {
+//       const removedAmount = prev.amounts[index];
+//       return {
+//         ...prev,
+//         entry_dates: prev.entry_dates.filter((_, i) => i !== index),
+//         entries_by: prev.entries_by.filter((_, i) => i !== index),
+//         amounts: prev.amounts.filter((_, i) => i !== index),
+//         payment_remarks: prev.payment_remarks.filter((_, i) => i !== index),
+//         total_paid: (
+//           parseFloat(prev.total_paid) - parseFloat(removedAmount)
+//         ).toString(),
+//       };
+//     });
+//   }, []);
 
 //   // Handle form submission with API - Save
 //   const handleSavePayment = async () => {
 //     // Basic validation
-//     if (!formData.customer_name || !formData.opening_balance || !formData.total_paid) {
+//     if (
+//       !formData.customer_name ||
+//       !formData.opening_balance ||
+//       !formData.total_paid
+//     ) {
 //       Alert.alert('Error', 'Please fill in all required fields');
 //       return;
 //     }
@@ -297,7 +339,10 @@
 //     }
 
 //     if (totalPaid > openingBalance) {
-//       Alert.alert('Error', 'Amount paid cannot be greater than opening balance');
+//       Alert.alert(
+//         'Error',
+//         'Amount paid cannot be greater than opening balance',
+//       );
 //       return;
 //     }
 
@@ -316,7 +361,7 @@
 //         entry_dates: formData.entry_dates,
 //         entries_by: formData.entries_by,
 //         amounts: formData.amounts,
-//         payment_remarks: formData.payment_remarks
+//         payment_remarks: formData.payment_remarks,
 //       };
 
 //       // If this is a new payment and total_paid has value but no history, create initial entry
@@ -345,7 +390,7 @@
 //         status: 'pending', // Always set to pending for new/edited payments
 
 //         // Include payment history arrays
-//         ...paymentHistory
+//         ...paymentHistory,
 //       };
 
 //       let response;
@@ -360,23 +405,20 @@
 //         endpoint = `${API_BASE_URL}/customer-payments/add`;
 //       }
 
-//       response = await axios.post(
-//         endpoint,
-//         apiData,
-//         {
-//           timeout: 30000,
-//           headers: {
-//             'Accept': 'application/json',
-//             'Content-Type': 'application/json',
-//           }
-//         }
-//       );
+//       response = await axios.post(endpoint, apiData, {
+//         timeout: 30000,
+//         headers: {
+//           Accept: 'application/json',
+//           'Content-Type': 'application/json',
+//         },
+//       });
 
 //       if (response.data && response.data.status === 'success') {
-//         Alert.alert('Success',
+//         Alert.alert(
+//           'Success',
 //           isEditMode
 //             ? 'Customer payment updated successfully! Status reset to pending for admin approval.'
-//             : 'Customer payment added successfully!'
+//             : 'Customer payment added successfully!',
 //         );
 
 //         // Reset form if not in edit mode
@@ -399,28 +441,35 @@
 //             entry_dates: [],
 //             entries_by: [],
 //             amounts: [],
-//             payment_remarks: []
+//             payment_remarks: [],
 //           });
+//           // Reset the fetched tractor models flag when creating new payment
+//           setHasFetchedTractorModels(false);
 //         }
 
 //         // Navigate back to payment details with refresh
 //         navigation.navigate('Customerpaymentdetails', {
-//           refresh: true
+//           refresh: true,
 //         });
 //       } else {
-//         Alert.alert('Error', response.data.message || 'Failed to process payment');
+//         Alert.alert(
+//           'Error',
+//           response.data.message || 'Failed to process payment',
+//         );
 //       }
 //     } catch (error) {
 //       console.log('Error processing payment:', error);
 
 //       if (error.response) {
-//         Alert.alert('Error',
+//         Alert.alert(
+//           'Error',
 //           error.response.data?.message ||
-//           `Server error: ${error.response.status}`
+//             `Server error: ${error.response.status}`,
 //         );
 //       } else if (error.request) {
-//         Alert.alert('Network Error',
-//           'Unable to connect to server. Please check your internet connection.'
+//         Alert.alert(
+//           'Network Error',
+//           'Unable to connect to server. Please check your internet connection.',
 //         );
 //       } else {
 //         Alert.alert('Error', 'An unexpected error occurred.');
@@ -436,16 +485,14 @@
 //       visible={showTractorModelDropdown}
 //       transparent={true}
 //       animationType="slide"
-//       onRequestClose={() => setShowTractorModelDropdown(false)}
-//     >
+//       onRequestClose={() => setShowTractorModelDropdown(false)}>
 //       <View style={styles.modalOverlay}>
 //         <View style={styles.modalContent}>
 //           <View style={styles.modalHeader}>
 //             <Text style={styles.modalTitle}>Select Tractor Model</Text>
 //             <TouchableOpacity
 //               onPress={() => setShowTractorModelDropdown(false)}
-//               style={styles.closeButton}
-//             >
+//               style={styles.closeButton}>
 //               <Icon2 name="close" size={moderateScale(24)} color="#000" />
 //             </TouchableOpacity>
 //           </View>
@@ -461,8 +508,7 @@
 //               renderItem={({item}) => (
 //                 <TouchableOpacity
 //                   style={styles.dropdownItem}
-//                   onPress={() => handleTractorModelSelect(item)}
-//                 >
+//                   onPress={() => handleTractorModelSelect(item)}>
 //                   <Text style={styles.dropdownItemText}>{item}</Text>
 //                 </TouchableOpacity>
 //               )}
@@ -481,16 +527,14 @@
 //       visible={showPaymentHistoryModal}
 //       animationType="slide"
 //       transparent={true}
-//       onRequestClose={() => setShowPaymentHistoryModal(false)}
-//     >
+//       onRequestClose={() => setShowPaymentHistoryModal(false)}>
 //       <View style={styles.paymentHistoryModalOverlay}>
 //         <View style={styles.paymentHistoryModalContent}>
 //           <View style={styles.paymentHistoryModalHeader}>
 //             <Text style={styles.paymentHistoryModalTitle}>Payment History</Text>
 //             <TouchableOpacity
 //               onPress={() => setShowPaymentHistoryModal(false)}
-//               style={styles.paymentHistoryCloseButton}
-//             >
+//               style={styles.paymentHistoryCloseButton}>
 //               <Icon2 name="close" size={moderateScale(24)} color="#000" />
 //             </TouchableOpacity>
 //           </View>
@@ -502,39 +546,52 @@
 //                 date,
 //                 entry_by: formData.entries_by[index],
 //                 amount: formData.amounts[index],
-//                 remarks: formData.payment_remarks[index]
+//                 remarks: formData.payment_remarks[index],
 //               }))}
 //               renderItem={({item, index}) => (
 //                 <View style={styles.paymentHistoryItem}>
 //                   <View style={styles.paymentHistoryItemHeader}>
-//                     <Text style={styles.paymentHistoryAmount}>₹{item.amount}</Text>
+//                     <Text style={styles.paymentHistoryAmount}>
+//                       ₹{item.amount}
+//                     </Text>
 //                     <View style={styles.paymentHistoryActions}>
 //                       <Text style={styles.paymentHistoryDate}>{item.date}</Text>
 //                       <TouchableOpacity
 //                         onPress={() => removePaymentHistoryEntry(index)}
-//                         style={styles.removePaymentButton}
-//                       >
-//                         <Icon2 name="delete" size={moderateScale(20)} color="#F44336" />
+//                         style={styles.removePaymentButton}>
+//                         <Icon2
+//                           name="delete"
+//                           size={moderateScale(20)}
+//                           color="#F44336"
+//                         />
 //                       </TouchableOpacity>
 //                     </View>
 //                   </View>
 //                   <View style={styles.paymentHistoryDetails}>
-//                     <Text style={styles.paymentHistoryBy}>By: {item.entry_by}</Text>
+//                     <Text style={styles.paymentHistoryBy}>
+//                       By: {item.entry_by}
+//                     </Text>
 //                     {item.remarks && (
-//                       <Text style={styles.paymentHistoryRemarks}>Remarks: {item.remarks}</Text>
+//                       <Text style={styles.paymentHistoryRemarks}>
+//                         Remarks: {item.remarks}
+//                       </Text>
 //                     )}
 //                   </View>
 //                 </View>
 //               )}
-//               keyExtractor={(item) => item.id}
+//               keyExtractor={item => item.id}
 //               ListEmptyComponent={
-//                 <Text style={styles.noPaymentHistory}>No payment history found</Text>
+//                 <Text style={styles.noPaymentHistory}>
+//                   No payment history found
+//                 </Text>
 //               }
 //             />
 //           ) : (
 //             <View style={styles.noPaymentHistoryContainer}>
 //               <Icon2 name="history" size={moderateScale(60)} color="#ccc" />
-//               <Text style={styles.noPaymentHistory}>No payment history available</Text>
+//               <Text style={styles.noPaymentHistory}>
+//                 No payment history available
+//               </Text>
 //             </View>
 //           )}
 
@@ -544,14 +601,12 @@
 //               onPress={() => {
 //                 setShowPaymentHistoryModal(false);
 //                 setIsAddingPaymentHistory(true);
-//               }}
-//             >
+//               }}>
 //               <LinearGradient
 //                 colors={['#7E5EA9', '#20AEBC']}
 //                 style={styles.addHistoryGradient}
-//                 start={{ x: 0, y: 0 }}
-//                 end={{ x: 1, y: 0 }}
-//               >
+//                 start={{x: 0, y: 0}}
+//                 end={{x: 1, y: 0}}>
 //                 <Icon2 name="add" size={moderateScale(20)} color="#FFF" />
 //                 <Text style={styles.addHistoryText}>Add Payment History</Text>
 //               </LinearGradient>
@@ -568,16 +623,16 @@
 //       visible={isAddingPaymentHistory}
 //       animationType="slide"
 //       transparent={true}
-//       onRequestClose={() => setIsAddingPaymentHistory(false)}
-//     >
+//       onRequestClose={() => setIsAddingPaymentHistory(false)}>
 //       <View style={styles.addPaymentModalOverlay}>
 //         <View style={styles.addPaymentModalContent}>
 //           <View style={styles.addPaymentModalHeader}>
-//             <Text style={styles.addPaymentModalTitle}>Add Payment History Entry</Text>
+//             <Text style={styles.addPaymentModalTitle}>
+//               Add Payment History Entry
+//             </Text>
 //             <TouchableOpacity
 //               onPress={() => setIsAddingPaymentHistory(false)}
-//               style={styles.closeButton}
-//             >
+//               style={styles.closeButton}>
 //               <Icon2 name="close" size={moderateScale(24)} color="#000" />
 //             </TouchableOpacity>
 //           </View>
@@ -590,14 +645,17 @@
 //                 <LinearGradient
 //                   colors={['#7E5EA9', '#20AEBC']}
 //                   style={styles.gradientBorder}
-//                   start={{ x: 0, y: 0 }}
-//                   end={{ x: 1, y: 0 }}
-//                 >
+//                   start={{x: 0, y: 0}}
+//                   end={{x: 1, y: 0}}>
 //                   <View style={styles.dateContainer}>
 //                     <Text style={styles.dateText}>
 //                       {formatDate(newPaymentHistory.entry_date)}
 //                     </Text>
-//                     <Icon1 name="calendar-o" size={moderateScale(20)} color="grey" />
+//                     <Icon1
+//                       name="calendar-o"
+//                       size={moderateScale(20)}
+//                       color="grey"
+//                     />
 //                   </View>
 //                 </LinearGradient>
 //               </TouchableOpacity>
@@ -609,15 +667,16 @@
 //               <LinearGradient
 //                 colors={['#7E5EA9', '#20AEBC']}
 //                 style={styles.gradientBorder}
-//                 start={{ x: 0, y: 0 }}
-//                 end={{ x: 1, y: 0 }}
-//               >
+//                 start={{x: 0, y: 0}}
+//                 end={{x: 1, y: 0}}>
 //                 <TextInput
 //                   style={styles.textInput}
 //                   placeholder="Enter Entry By"
 //                   placeholderTextColor="#666"
 //                   value={newPaymentHistory.entry_by}
-//                   onChangeText={(text) => setNewPaymentHistory(prev => ({ ...prev, entry_by: text }))}
+//                   onChangeText={text =>
+//                     setNewPaymentHistory(prev => ({...prev, entry_by: text}))
+//                   }
 //                 />
 //               </LinearGradient>
 //             </View>
@@ -628,15 +687,16 @@
 //               <LinearGradient
 //                 colors={['#7E5EA9', '#20AEBC']}
 //                 style={styles.gradientBorder}
-//                 start={{ x: 0, y: 0 }}
-//                 end={{ x: 1, y: 0 }}
-//               >
+//                 start={{x: 0, y: 0}}
+//                 end={{x: 1, y: 0}}>
 //                 <TextInput
 //                   style={styles.textInput}
 //                   placeholder="Enter Amount"
 //                   placeholderTextColor="#666"
 //                   value={newPaymentHistory.amount}
-//                   onChangeText={(text) => setNewPaymentHistory(prev => ({ ...prev, amount: text }))}
+//                   onChangeText={text =>
+//                     setNewPaymentHistory(prev => ({...prev, amount: text}))
+//                   }
 //                   keyboardType="numeric"
 //                 />
 //               </LinearGradient>
@@ -648,15 +708,19 @@
 //               <LinearGradient
 //                 colors={['#7E5EA9', '#20AEBC']}
 //                 style={styles.gradientBorder}
-//                 start={{ x: 0, y: 0 }}
-//                 end={{ x: 1, y: 0 }}
-//               >
+//                 start={{x: 0, y: 0}}
+//                 end={{x: 1, y: 0}}>
 //                 <TextInput
 //                   style={[styles.textInput, styles.multilineInput]}
 //                   placeholder="Enter Remarks"
 //                   placeholderTextColor="#666"
 //                   value={newPaymentHistory.payment_remarks}
-//                   onChangeText={(text) => setNewPaymentHistory(prev => ({ ...prev, payment_remarks: text }))}
+//                   onChangeText={text =>
+//                     setNewPaymentHistory(prev => ({
+//                       ...prev,
+//                       payment_remarks: text,
+//                     }))
+//                   }
 //                   multiline
 //                   numberOfLines={3}
 //                   textAlignVertical="top"
@@ -668,28 +732,24 @@
 //           <View style={styles.addPaymentButtons}>
 //             <TouchableOpacity
 //               style={styles.cancelAddButton}
-//               onPress={() => setIsAddingPaymentHistory(false)}
-//             >
+//               onPress={() => setIsAddingPaymentHistory(false)}>
 //               <LinearGradient
 //                 colors={['#F44336', '#D32F2F']}
 //                 style={styles.cancelAddGradient}
-//                 start={{ x: 0, y: 0 }}
-//                 end={{ x: 1, y: 0 }}
-//               >
+//                 start={{x: 0, y: 0}}
+//                 end={{x: 1, y: 0}}>
 //                 <Text style={styles.cancelAddText}>Cancel</Text>
 //               </LinearGradient>
 //             </TouchableOpacity>
 
 //             <TouchableOpacity
 //               style={styles.saveAddButton}
-//               onPress={handleAddPaymentHistory}
-//             >
+//               onPress={handleAddPaymentHistory}>
 //               <LinearGradient
 //                 colors={['#4CAF50', '#45a049']}
 //                 style={styles.saveAddGradient}
-//                 start={{ x: 0, y: 0 }}
-//                 end={{ x: 1, y: 0 }}
-//               >
+//                 start={{x: 0, y: 0}}
+//                 end={{x: 1, y: 0}}>
 //                 <Text style={styles.saveAddText}>Add Payment</Text>
 //               </LinearGradient>
 //             </TouchableOpacity>
@@ -700,23 +760,26 @@
 //   );
 
 //   return (
-//     <View style={[
-//       styles.container,
-//       { paddingTop: insets.top, paddingBottom: insets.bottom }
-//     ]}>
-//       <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
+//     <View
+//       style={[
+//         styles.container,
+//         {paddingTop: insets.top, paddingBottom: insets.bottom},
+//       ]}>
+//       <StatusBar
+//         barStyle="dark-content"
+//         translucent
+//         backgroundColor="transparent"
+//       />
 
 //       {/* Header */}
 //       <LinearGradient
 //         colors={['#7E5EA9', '#20AEBC']}
 //         style={styles.header}
-//         start={{ x: 0, y: 0 }}
-//         end={{ x: 1, y: 0 }}
-//       >
+//         start={{x: 0, y: 0}}
+//         end={{x: 1, y: 0}}>
 //         <TouchableOpacity
 //           style={styles.backButton}
-//           onPress={() => navigation.goBack()}
-//         >
+//           onPress={() => navigation.goBack()}>
 //           <Icon name="arrow-left" size={moderateScale(24)} color="#FFF" />
 //         </TouchableOpacity>
 //         <Text style={styles.headerTitle}>
@@ -728,21 +791,20 @@
 //       <ScrollView
 //         contentContainerStyle={styles.content}
 //         showsVerticalScrollIndicator={false}
-//         keyboardShouldPersistTaps="handled"
-//       >
+//         keyboardShouldPersistTaps="handled">
 //         {/* Status Info for Edit Mode */}
 //         {isEditMode && (
 //           <View style={styles.statusInfoContainer}>
 //             <LinearGradient
 //               colors={['#FF9800', '#FF5722']}
 //               style={styles.statusInfoGradient}
-//               start={{ x: 0, y: 0 }}
-//               end={{ x: 1, y: 0 }}
-//             >
+//               start={{x: 0, y: 0}}
+//               end={{x: 1, y: 0}}>
 //               <View style={styles.statusInfoContent}>
 //                 <Icon2 name="info" size={moderateScale(20)} color="#FFF" />
 //                 <Text style={styles.statusInfoText}>
-//                   After editing, status will reset to "Pending" for admin approval
+//                   After editing, status will reset to "Pending" for admin
+//                   approval
 //                 </Text>
 //               </View>
 //             </LinearGradient>
@@ -755,15 +817,14 @@
 //           <LinearGradient
 //             colors={['#7E5EA9', '#20AEBC']}
 //             style={styles.gradientBorder}
-//             start={{ x: 0, y: 0 }}
-//             end={{ x: 1, y: 0 }}
-//           >
+//             start={{x: 0, y: 0}}
+//             end={{x: 1, y: 0}}>
 //             <TextInput
 //               style={styles.textInput}
 //               placeholder="Enter Entry By"
 //               placeholderTextColor="#666"
 //               value={formData.entry_by}
-//               onChangeText={(text) => updateFormData('entry_by', text)}
+//               onChangeText={text => updateFormData('entry_by', text)}
 //             />
 //           </LinearGradient>
 //         </View>
@@ -775,14 +836,17 @@
 //             <LinearGradient
 //               colors={['#7E5EA9', '#20AEBC']}
 //               style={styles.gradientBorder}
-//               start={{ x: 0, y: 0 }}
-//               end={{ x: 1, y: 0 }}
-//             >
+//               start={{x: 0, y: 0}}
+//               end={{x: 1, y: 0}}>
 //               <View style={styles.dateContainer}>
 //                 <Text style={styles.dateText}>
 //                   {formatDate(formData.entry_date)}
 //                 </Text>
-//                 <Icon1 name="calendar-o" size={moderateScale(20)} color="grey" />
+//                 <Icon1
+//                   name="calendar-o"
+//                   size={moderateScale(20)}
+//                   color="grey"
+//                 />
 //               </View>
 //             </LinearGradient>
 //           </TouchableOpacity>
@@ -794,15 +858,14 @@
 //           <LinearGradient
 //             colors={['#7E5EA9', '#20AEBC']}
 //             style={styles.gradientBorder}
-//             start={{ x: 0, y: 0 }}
-//             end={{ x: 1, y: 0 }}
-//           >
+//             start={{x: 0, y: 0}}
+//             end={{x: 1, y: 0}}>
 //             <TextInput
 //               style={styles.textInput}
 //               placeholder="Enter Ledger No"
 //               placeholderTextColor="#666"
 //               value={formData.ledger_no}
-//               onChangeText={(text) => updateFormData('ledger_no', text)}
+//               onChangeText={text => updateFormData('ledger_no', text)}
 //             />
 //           </LinearGradient>
 //         </View>
@@ -813,15 +876,14 @@
 //           <LinearGradient
 //             colors={['#7E5EA9', '#20AEBC']}
 //             style={styles.gradientBorder}
-//             start={{ x: 0, y: 0 }}
-//             end={{ x: 1, y: 0 }}
-//           >
+//             start={{x: 0, y: 0}}
+//             end={{x: 1, y: 0}}>
 //             <TextInput
 //               style={styles.textInput}
 //               placeholder="Enter Customer Name"
 //               placeholderTextColor="#666"
 //               value={formData.customer_name}
-//               onChangeText={(text) => updateFormData('customer_name', text)}
+//               onChangeText={text => updateFormData('customer_name', text)}
 //             />
 //           </LinearGradient>
 //         </View>
@@ -832,15 +894,14 @@
 //           <LinearGradient
 //             colors={['#7E5EA9', '#20AEBC']}
 //             style={styles.gradientBorder}
-//             start={{ x: 0, y: 0 }}
-//             end={{ x: 1, y: 0 }}
-//           >
+//             start={{x: 0, y: 0}}
+//             end={{x: 1, y: 0}}>
 //             <TextInput
 //               style={styles.textInput}
 //               placeholder="Enter Customer Father Name"
 //               placeholderTextColor="#666"
 //               value={formData.father_name}
-//               onChangeText={(text) => updateFormData('father_name', text)}
+//               onChangeText={text => updateFormData('father_name', text)}
 //             />
 //           </LinearGradient>
 //         </View>
@@ -851,15 +912,14 @@
 //           <LinearGradient
 //             colors={['#7E5EA9', '#20AEBC']}
 //             style={styles.gradientBorder}
-//             start={{ x: 0, y: 0 }}
-//             end={{ x: 1, y: 0 }}
-//           >
+//             start={{x: 0, y: 0}}
+//             end={{x: 1, y: 0}}>
 //             <TextInput
 //               style={styles.textInput}
 //               placeholder="Enter Customer Mobile"
 //               placeholderTextColor="#666"
 //               value={formData.customer_mobile}
-//               onChangeText={(text) => updateFormData('customer_mobile', text)}
+//               onChangeText={text => updateFormData('customer_mobile', text)}
 //               keyboardType="phone-pad"
 //             />
 //           </LinearGradient>
@@ -871,15 +931,14 @@
 //           <LinearGradient
 //             colors={['#7E5EA9', '#20AEBC']}
 //             style={styles.gradientBorder}
-//             start={{ x: 0, y: 0 }}
-//             end={{ x: 1, y: 0 }}
-//           >
+//             start={{x: 0, y: 0}}
+//             end={{x: 1, y: 0}}>
 //             <TextInput
 //               style={[styles.textInput, styles.multilineInput]}
 //               placeholder="Enter Customer Address"
 //               placeholderTextColor="#666"
 //               value={formData.customer_address}
-//               onChangeText={(text) => updateFormData('customer_address', text)}
+//               onChangeText={text => updateFormData('customer_address', text)}
 //               multiline
 //               numberOfLines={3}
 //               textAlignVertical="top"
@@ -894,17 +953,21 @@
 //             <LinearGradient
 //               colors={['#7E5EA9', '#20AEBC']}
 //               style={styles.gradientBorder}
-//               start={{ x: 0, y: 0 }}
-//               end={{ x: 1, y: 0 }}
-//             >
+//               start={{x: 0, y: 0}}
+//               end={{x: 1, y: 0}}>
 //               <View style={styles.dropdownContainer}>
-//                 <Text style={[
-//                   styles.dropdownText,
-//                   !formData.tractor_model && styles.placeholderText
-//                 ]}>
+//                 <Text
+//                   style={[
+//                     styles.dropdownText,
+//                     !formData.tractor_model && styles.placeholderText,
+//                   ]}>
 //                   {formData.tractor_model || 'Select Tractor Model'}
 //                 </Text>
-//                 <Icon2 name="keyboard-arrow-down" size={moderateScale(24)} color="#666" />
+//                 <Icon2
+//                   name="keyboard-arrow-down"
+//                   size={moderateScale(24)}
+//                   color="#666"
+//                 />
 //               </View>
 //             </LinearGradient>
 //           </TouchableOpacity>
@@ -917,14 +980,17 @@
 //             <LinearGradient
 //               colors={['#7E5EA9', '#20AEBC']}
 //               style={styles.gradientBorder}
-//               start={{ x: 0, y: 0 }}
-//               end={{ x: 1, y: 0 }}
-//             >
+//               start={{x: 0, y: 0}}
+//               end={{x: 1, y: 0}}>
 //               <View style={styles.dateContainer}>
 //                 <Text style={styles.dateText}>
 //                   {formatDate(formData.delivery_date)}
 //                 </Text>
-//                 <Icon1 name="calendar-o" size={moderateScale(20)} color="grey" />
+//                 <Icon1
+//                   name="calendar-o"
+//                   size={moderateScale(20)}
+//                   color="grey"
+//                 />
 //               </View>
 //             </LinearGradient>
 //           </TouchableOpacity>
@@ -936,15 +1002,14 @@
 //           <LinearGradient
 //             colors={['#7E5EA9', '#20AEBC']}
 //             style={styles.gradientBorder}
-//             start={{ x: 0, y: 0 }}
-//             end={{ x: 1, y: 0 }}
-//           >
+//             start={{x: 0, y: 0}}
+//             end={{x: 1, y: 0}}>
 //             <TextInput
 //               style={styles.textInput}
 //               placeholder="Enter Chassis No"
 //               placeholderTextColor="#666"
 //               value={formData.chassis_no}
-//               onChangeText={(text) => updateFormData('chassis_no', text)}
+//               onChangeText={text => updateFormData('chassis_no', text)}
 //             />
 //           </LinearGradient>
 //         </View>
@@ -955,15 +1020,14 @@
 //           <LinearGradient
 //             colors={['#7E5EA9', '#20AEBC']}
 //             style={styles.gradientBorder}
-//             start={{ x: 0, y: 0 }}
-//             end={{ x: 1, y: 0 }}
-//           >
+//             start={{x: 0, y: 0}}
+//             end={{x: 1, y: 0}}>
 //             <TextInput
 //               style={styles.textInput}
 //               placeholder="Enter Opening Balance"
 //               placeholderTextColor="#666"
 //               value={formData.opening_balance}
-//               onChangeText={(text) => updateFormData('opening_balance', text)}
+//               onChangeText={text => updateFormData('opening_balance', text)}
 //               keyboardType="numeric"
 //               returnKeyType="done"
 //             />
@@ -976,15 +1040,15 @@
 //           <LinearGradient
 //             colors={['#7E5EA9', '#20AEBC']}
 //             style={styles.gradientBorder}
-//             start={{ x: 0, y: 0 }}
-//             end={{ x: 1, y: 0 }}
-//           >
+//             start={{x: 0, y: 0}}
+//             end={{x: 1, y: 0}}>
 //             <TextInput
 //               style={styles.textInput}
 //               placeholder="Total Amount Paid"
 //               placeholderTextColor="#666"
 //               value={formData.total_paid}
-//               editable={false}
+//               onChangeText={text => updateFormData('total_paid', text)}
+//               keyboardType="numeric"
 //             />
 //           </LinearGradient>
 //         </View>
@@ -995,15 +1059,15 @@
 //           <LinearGradient
 //             colors={['#7E5EA9', '#20AEBC']}
 //             style={styles.gradientBorder}
-//             start={{ x: 0, y: 0 }}
-//             end={{ x: 1, y: 0 }}
-//           >
+//             start={{x: 0, y: 0}}
+//             end={{x: 1, y: 0}}>
 //             <View style={styles.displayContainer}>
 //               <Text style={styles.displayLabel}>Remaining Payment:</Text>
-//               <Text style={[
-//                 styles.displayValue,
-//                 remainingPayment < 0 && styles.negativeValue
-//               ]}>
+//               <Text
+//                 style={[
+//                   styles.displayValue,
+//                   remainingPayment < 0 && styles.negativeValue,
+//                 ]}>
 //                 ₹{remainingPayment.toFixed(2)}
 //               </Text>
 //             </View>
@@ -1015,14 +1079,12 @@
 //           {formData.entry_dates && formData.entry_dates.length > 0 && (
 //             <TouchableOpacity
 //               style={styles.viewHistoryButton}
-//               onPress={() => setShowPaymentHistoryModal(true)}
-//             >
+//               onPress={() => setShowPaymentHistoryModal(true)}>
 //               <LinearGradient
 //                 colors={['#20AEBC', '#7E5EA9']}
 //                 style={styles.viewHistoryGradient}
-//                 start={{ x: 0, y: 0 }}
-//                 end={{ x: 1, y: 0 }}
-//               >
+//                 start={{x: 0, y: 0}}
+//                 end={{x: 1, y: 0}}>
 //                 <Icon2 name="history" size={moderateScale(20)} color="#FFF" />
 //                 <Text style={styles.viewHistoryText}>
 //                   View Payment History ({formData.entry_dates.length} entries)
@@ -1034,16 +1096,16 @@
 //           {isEditMode && (
 //             <TouchableOpacity
 //               style={styles.addPaymentHistoryButton}
-//               onPress={() => setIsAddingPaymentHistory(true)}
-//             >
+//               onPress={() => setIsAddingPaymentHistory(true)}>
 //               <LinearGradient
 //                 colors={['#4CAF50', '#45a049']}
 //                 style={styles.addPaymentHistoryGradient}
-//                 start={{ x: 0, y: 0 }}
-//                 end={{ x: 1, y: 0 }}
-//               >
+//                 start={{x: 0, y: 0}}
+//                 end={{x: 1, y: 0}}>
 //                 <Icon2 name="add" size={moderateScale(20)} color="#FFF" />
-//                 <Text style={styles.addPaymentHistoryText}>Add Payment Entry</Text>
+//                 <Text style={styles.addPaymentHistoryText}>
+//                   Add Payment Entry
+//                 </Text>
 //               </LinearGradient>
 //             </TouchableOpacity>
 //           )}
@@ -1054,19 +1116,19 @@
 //           style={[styles.buttonContainer, loading && styles.buttonDisabled]}
 //           onPress={handleSavePayment}
 //           activeOpacity={0.8}
-//           disabled={loading}
-//         >
+//           disabled={loading}>
 //           <LinearGradient
 //             colors={['#AC62A1', '#20AEBC']}
 //             style={styles.gradientButton}
-//             start={{ x: 0, y: 0 }}
-//             end={{ x: 1, y: 0 }}
-//           >
+//             start={{x: 0, y: 0}}
+//             end={{x: 1, y: 0}}>
 //             {loading ? (
 //               <ActivityIndicator size="small" color="#FFF" />
 //             ) : (
 //               <Text style={styles.buttonText}>
-//                 {isEditMode ? 'Update Customer Payment' : 'Add Customer Payment'}
+//                 {isEditMode
+//                   ? 'Update Customer Payment'
+//                   : 'Add Customer Payment'}
 //               </Text>
 //             )}
 //           </LinearGradient>
@@ -1108,6 +1170,8 @@
 //     </View>
 //   );
 // };
+
+// // ... Keep the same styles object as before (no changes needed) ...
 
 // const styles = StyleSheet.create({
 //   container: {
@@ -1538,6 +1602,11 @@
 
 // export default Addcustomerpayment;
 
+
+
+
+
+
 import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
@@ -1578,6 +1647,8 @@ const Addcustomerpayment = ({navigation, route}) => {
   const isEditMode = route.params?.payment ? true : false;
   const paymentData = route.params?.payment || {};
 
+  console.log('payment Data', paymentData);
+
   // State for form fields - matching Customerpaymentdetails structure
   const [formData, setFormData] = useState({
     id: '',
@@ -1602,6 +1673,9 @@ const Addcustomerpayment = ({navigation, route}) => {
     amounts: [],
     payment_remarks: [],
   });
+
+  // Separate state for payment history to match API structure
+  const [paymentHistory, setPaymentHistory] = useState([]);
 
   // Tractor models from API
   const [tractorModels, setTractorModels] = useState([]);
@@ -1698,6 +1772,18 @@ const Addcustomerpayment = ({navigation, route}) => {
     if (isInitialized) return;
 
     if (isEditMode && paymentData) {
+      // Extract history from paymentData and format it
+      const history = paymentData.history || [];
+      
+      // Convert history array to the format we need
+      const entry_dates = history.map(item => item.entry_date);
+      const entries_by = history.map(item => item.entry_by);
+      const amounts = history.map(item => item.amount);
+      const payment_remarks = history.map(item => item.remarks || '');
+      
+      // Calculate total paid from history
+      const totalPaid = amounts.reduce((sum, amount) => sum + parseFloat(amount || 0), 0);
+
       setFormData(prev => ({
         ...prev,
         id: paymentData.id || '',
@@ -1717,18 +1803,32 @@ const Addcustomerpayment = ({navigation, route}) => {
           : new Date(),
         chassis_no: paymentData.chassis_no || '',
         opening_balance: paymentData.opening_balance || '',
-        total_paid: paymentData.total_paid || '',
+        total_paid: totalPaid.toString(),
         status: 'pending', // Reset status to pending when editing
 
-        // Initialize arrays from payment data or empty arrays
-        entry_dates: paymentData.entry_dates || [],
-        entries_by: paymentData.entries_by || [],
-        amounts: paymentData.amounts || [],
-        payment_remarks: paymentData.payment_remarks || [],
+        // Initialize arrays from payment data history
+        entry_dates: entry_dates,
+        entries_by: entries_by,
+        amounts: amounts,
+        payment_remarks: payment_remarks,
       }));
+
+      // Also set payment history state
+      setPaymentHistory(history);
     }
     setIsInitialized(true);
   }, [isEditMode, paymentData, isInitialized, fetchTractorModels]);
+
+  // Update total paid whenever payment history changes
+  useEffect(() => {
+    if (paymentHistory.length > 0) {
+      const totalPaid = paymentHistory.reduce(
+        (sum, item) => sum + parseFloat(item.amount || 0),
+        0,
+      );
+      updateFormData('total_paid', totalPaid.toString());
+    }
+  }, [paymentHistory, updateFormData]);
 
   // Date change handlers
   const onDateChange = useCallback(
@@ -1807,20 +1907,24 @@ const Addcustomerpayment = ({navigation, route}) => {
       return;
     }
 
-    // Add to form data arrays
+    // Create new history object
+    const newHistoryItem = {
+      entry_date: formatDateForAPI(newPaymentHistory.entry_date),
+      entry_by: newPaymentHistory.entry_by,
+      amount: amount.toString(),
+      remarks: newPaymentHistory.payment_remarks || '',
+    };
+
+    // Add to payment history
+    setPaymentHistory(prev => [...prev, newHistoryItem]);
+
+    // Also update form data arrays for backward compatibility
     setFormData(prev => ({
       ...prev,
-      entry_dates: [
-        ...prev.entry_dates,
-        formatDateForAPI(newPaymentHistory.entry_date),
-      ],
+      entry_dates: [...prev.entry_dates, formatDateForAPI(newPaymentHistory.entry_date)],
       entries_by: [...prev.entries_by, newPaymentHistory.entry_by],
       amounts: [...prev.amounts, amount],
-      payment_remarks: [
-        ...prev.payment_remarks,
-        newPaymentHistory.payment_remarks || '',
-      ],
-      total_paid: (parseFloat(prev.total_paid) + amount).toString(),
+      payment_remarks: [...prev.payment_remarks, newPaymentHistory.payment_remarks || ''],
     }));
 
     // Reset new payment history form
@@ -1836,6 +1940,12 @@ const Addcustomerpayment = ({navigation, route}) => {
 
   // Remove payment history entry
   const removePaymentHistoryEntry = useCallback(index => {
+    setPaymentHistory(prev => {
+      const updatedHistory = prev.filter((_, i) => i !== index);
+      return updatedHistory;
+    });
+
+    // Also update form data arrays for backward compatibility
     setFormData(prev => {
       const removedAmount = prev.amounts[index];
       return {
@@ -1844,12 +1954,42 @@ const Addcustomerpayment = ({navigation, route}) => {
         entries_by: prev.entries_by.filter((_, i) => i !== index),
         amounts: prev.amounts.filter((_, i) => i !== index),
         payment_remarks: prev.payment_remarks.filter((_, i) => i !== index),
-        total_paid: (
-          parseFloat(prev.total_paid) - parseFloat(removedAmount)
-        ).toString(),
       };
     });
   }, []);
+
+  // API call to add payment history entry
+  const addPaymentHistoryAPI = async (paymentId, historyItem) => {
+    try {
+      const userId = await AsyncStorage.getItem('userId');
+      if (!userId) {
+        throw new Error('User not logged in');
+      }
+
+      const response = await axios.post(
+        `${API_BASE_URL}/customer-payments/add-history`,
+        {
+          customer_payment_id: paymentId,
+          entry_by: historyItem.entry_by,
+          entry_date: historyItem.entry_date,
+          amount: historyItem.amount,
+          remarks: historyItem.remarks || '',
+        },
+        {
+          timeout: 30000,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log('Error adding payment history:', error);
+      throw error;
+    }
+  };
 
   // Handle form submission with API - Save
   const handleSavePayment = async () => {
@@ -1894,22 +2034,6 @@ const Addcustomerpayment = ({navigation, route}) => {
         return;
       }
 
-      // Prepare payment history arrays
-      const paymentHistory = {
-        entry_dates: formData.entry_dates,
-        entries_by: formData.entries_by,
-        amounts: formData.amounts,
-        payment_remarks: formData.payment_remarks,
-      };
-
-      // If this is a new payment and total_paid has value but no history, create initial entry
-      if (!isEditMode && totalPaid > 0 && formData.entry_dates.length === 0) {
-        paymentHistory.entry_dates = [formatDateForAPI(new Date())];
-        paymentHistory.entries_by = [formData.entry_by || 'User'];
-        paymentHistory.amounts = [totalPaid];
-        paymentHistory.payment_remarks = ['Initial payment'];
-      }
-
       // Prepare data for API
       const apiData = {
         user_id: parseInt(userId),
@@ -1928,11 +2052,15 @@ const Addcustomerpayment = ({navigation, route}) => {
         status: 'pending', // Always set to pending for new/edited payments
 
         // Include payment history arrays
-        ...paymentHistory,
+        entry_dates: formData.entry_dates,
+        entries_by: formData.entries_by,
+        amounts: formData.amounts,
+        payment_remarks: formData.payment_remarks,
       };
 
       let response;
       let endpoint;
+      let paymentId;
 
       if (isEditMode) {
         // Update API call
@@ -1952,6 +2080,27 @@ const Addcustomerpayment = ({navigation, route}) => {
       });
 
       if (response.data && response.data.status === 'success') {
+        paymentId = response.data.data?.id || formData.id;
+        
+        // If this is edit mode and there are new payment history entries added locally,
+        // we need to add them via the separate API endpoint
+        if (isEditMode && paymentHistory.length > 0) {
+          // Find which history entries are new (don't have an id)
+          const newHistoryEntries = paymentHistory.filter(item => !item.id);
+          
+          if (newHistoryEntries.length > 0) {
+            try {
+              // Add each new history entry
+              for (const historyItem of newHistoryEntries) {
+                await addPaymentHistoryAPI(paymentId, historyItem);
+              }
+            } catch (historyError) {
+              console.log('Error adding payment history entries:', historyError);
+              // Continue anyway since the main payment was saved
+            }
+          }
+        }
+
         Alert.alert(
           'Success',
           isEditMode
@@ -1981,6 +2130,7 @@ const Addcustomerpayment = ({navigation, route}) => {
             amounts: [],
             payment_remarks: [],
           });
+          setPaymentHistory([]);
           // Reset the fetched tractor models flag when creating new payment
           setHasFetchedTractorModels(false);
         }
@@ -2077,15 +2227,9 @@ const Addcustomerpayment = ({navigation, route}) => {
             </TouchableOpacity>
           </View>
 
-          {formData.entry_dates && formData.entry_dates.length > 0 ? (
+          {paymentHistory.length > 0 ? (
             <FlatList
-              data={formData.entry_dates.map((date, index) => ({
-                id: index.toString(),
-                date,
-                entry_by: formData.entries_by[index],
-                amount: formData.amounts[index],
-                remarks: formData.payment_remarks[index],
-              }))}
+              data={paymentHistory}
               renderItem={({item, index}) => (
                 <View style={styles.paymentHistoryItem}>
                   <View style={styles.paymentHistoryItemHeader}>
@@ -2093,16 +2237,18 @@ const Addcustomerpayment = ({navigation, route}) => {
                       ₹{item.amount}
                     </Text>
                     <View style={styles.paymentHistoryActions}>
-                      <Text style={styles.paymentHistoryDate}>{item.date}</Text>
-                      <TouchableOpacity
-                        onPress={() => removePaymentHistoryEntry(index)}
-                        style={styles.removePaymentButton}>
-                        <Icon2
-                          name="delete"
-                          size={moderateScale(20)}
-                          color="#F44336"
-                        />
-                      </TouchableOpacity>
+                      <Text style={styles.paymentHistoryDate}>{item.entry_date}</Text>
+                      {!item.id && ( // Only show delete for locally added entries
+                        <TouchableOpacity
+                          onPress={() => removePaymentHistoryEntry(index)}
+                          style={styles.removePaymentButton}>
+                          <Icon2
+                            name="delete"
+                            size={moderateScale(20)}
+                            color="#F44336"
+                          />
+                        </TouchableOpacity>
+                      )}
                     </View>
                   </View>
                   <View style={styles.paymentHistoryDetails}>
@@ -2117,7 +2263,9 @@ const Addcustomerpayment = ({navigation, route}) => {
                   </View>
                 </View>
               )}
-              keyExtractor={item => item.id}
+              keyExtractor={(item, index) => 
+                item.id ? item.id.toString() : `local-${index}`
+              }
               ListEmptyComponent={
                 <Text style={styles.noPaymentHistory}>
                   No payment history found
@@ -2614,7 +2762,7 @@ const Addcustomerpayment = ({navigation, route}) => {
 
         {/* Payment History Info and Actions */}
         <View style={styles.paymentHistoryActionsContainer}>
-          {formData.entry_dates && formData.entry_dates.length > 0 && (
+          {paymentHistory.length > 0 && (
             <TouchableOpacity
               style={styles.viewHistoryButton}
               onPress={() => setShowPaymentHistoryModal(true)}>
@@ -2625,7 +2773,7 @@ const Addcustomerpayment = ({navigation, route}) => {
                 end={{x: 1, y: 0}}>
                 <Icon2 name="history" size={moderateScale(20)} color="#FFF" />
                 <Text style={styles.viewHistoryText}>
-                  View Payment History ({formData.entry_dates.length} entries)
+                  View Payment History ({paymentHistory.length} entries)
                 </Text>
               </LinearGradient>
             </TouchableOpacity>
