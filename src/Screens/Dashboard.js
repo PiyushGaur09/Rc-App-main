@@ -9,10 +9,8 @@ const Dashboard = ({navigation}) => {
 
   const menuItems = [
     { id: '1', title: "Stock Management", colors: ['#7E5EA9', '#20AEBC'],navigation:"Overview" },
-    // { id: '2', title: "Expected Delivery & Payment", colors: ['#1AB3BB', '#324162'],navigation:"ExpectedDeliveryPayment" },
     { id: '3', title: "RC Delivery", colors: ['#7E5EA9', '#20AEBC'],navigation:"Rcpage" },
     { id: '4', title: "PDI Inspection", colors: ['#AC62A1', '#EF8549'],navigation:"PDIPage" },
-    // { id: '5', title: "Customers", colors: ['#EE8C45', '#1AB3BB'],navigation:"Customerspage" },
     { id: '6', title: "Delivery Challan", colors: ['#1AB3BB', '#324162'],navigation:"DeliveryChallan" },
     { id: '7', title: "Form Status", colors: ['#7E5EA9', '#20AEBC'],navigation:"Formstatus1" },
     { id: '8', title: "Payment Management ", colors: ['#AC62A1', '#20AEBC'],navigation:"Paymentmanagement" },

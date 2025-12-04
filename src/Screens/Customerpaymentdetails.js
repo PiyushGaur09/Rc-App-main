@@ -38,6 +38,9 @@ const Customerpaymentdetails = ({ navigation, route }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [generatingPdf, setGeneratingPdf] = useState(false);
 
+
+  console.log(payments,"paymmmmm")
+
   // API Base URL
   const API_BASE_URL = 'https://argosmob.uk/makroo/public/api/v1';
 
@@ -288,7 +291,7 @@ const Customerpaymentdetails = ({ navigation, route }) => {
   // Render payment item
   const renderPaymentItem = ({ item, index }) => {
     const remaining = parseFloat(item.opening_balance) - parseFloat(item.total_paid);
-    console.log("itemmm",item)
+    // console.log("itemmm",item)
     return (
       <View style={styles.paymentItem}>
         <LinearGradient
