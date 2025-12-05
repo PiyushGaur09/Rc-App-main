@@ -19,7 +19,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-const API_BASE = 'https://argosmob.uk/makroo/public/api/v1';
+const API_BASE = 'https://makroomotors.com/makroo-panel/public/api/v1';
 
 const AllLocation = ({navigation}) => {
   const insets = useSafeAreaInsets();

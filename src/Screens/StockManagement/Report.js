@@ -27,7 +27,7 @@ const LAST_MONTH_DATA = [
 ];
 
 const API_URL =
-  'https://argosmob.uk/makroo/public/api/v1/models-overview/delivered/detail';
+  'https://makroomotors.com/makroo-panel/public/api/v1/models-overview/delivered/detail';
 
 export default function Report() {
   const insets = useSafeAreaInsets();

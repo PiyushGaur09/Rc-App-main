@@ -170,7 +170,7 @@ const Pdiinternalpage = ({navigation, route}) => {
   const makeAbsoluteUrl = relativePath => {
     if (!relativePath) return null;
     if (relativePath.startsWith('http')) return relativePath;
-    return `https://argosmob.uk/makroo/public/${relativePath.replace(
+    return `https://makroomotors.com/makroo-panel/public/${relativePath.replace(
       /^\/+/,
       '',
     )}`;
@@ -186,7 +186,7 @@ const Pdiinternalpage = ({navigation, route}) => {
     setLoadingModels(true);
     try {
       const response = await axios.get(
-        `https://argosmob.uk/makroo/public/api/v1/model/tractor-models?user_id=${userId}`,
+        `https://makroomotors.com/makroo-panel/public/api/v1/model/tractor-models?user_id=${userId}`,
         {
           timeout: 10000,
         },
@@ -269,7 +269,7 @@ const Pdiinternalpage = ({navigation, route}) => {
 
       const config = {
         method: 'post',
-        url: 'https://argosmob.uk/makroo/public/api/v1/pdi-delivery/form/get',
+        url: 'https://makroomotors.com/makroo-panel/public/api/v1/pdi-delivery/form/get',
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -945,7 +945,7 @@ const Pdiinternalpage = ({navigation, route}) => {
 
       const config = {
         method: 'post',
-        url: 'https://argosmob.uk/makroo/public/api/v1/pdi-delivery/form/update',
+        url: 'https://makroomotors.com/makroo-panel/public/api/v1/pdi-delivery/form/update',
         headers: {
           'Content-Type': 'multipart/form-data',
           Accept: 'application/json',
@@ -1027,7 +1027,7 @@ const Pdiinternalpage = ({navigation, route}) => {
 
       const config = {
         method: 'get',
-        url: `https://argosmob.uk/makroo/public/api/v1/pdi-delivery/form/generate-pdf/${existingFormId}`,
+        url: `https://makroomotors.com/makroo-panel/public/api/v1/pdi-delivery/form/generate-pdf/${existingFormId}`,
         timeout: 60000,
       };
 

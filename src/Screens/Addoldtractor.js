@@ -137,7 +137,7 @@ const Addoldtractor = ({navigation, route}) => {
       if (editData?.picture) {
         const pictureUrl = editData.picture.startsWith('http')
           ? editData.picture
-          : `https://argosmob.uk/makroo/public/${editData.picture.replace(
+          : `https://makroomotors.com/makroo-panel/public/${editData.picture.replace(
               /^\/+/,
               '',
             )}`;
@@ -176,7 +176,7 @@ const Addoldtractor = ({navigation, route}) => {
     setLoadingTractorModels(true);
     try {
       const response = await axios.get(
-        'https://argosmob.uk/makroo/public/api/v1/model/tractor-models',
+        'https://makroomotors.com/makroo-panel/public/api/v1/model/tractor-models',
         {
           headers: {
             Accept: 'application/json',
@@ -530,16 +530,11 @@ const Addoldtractor = ({navigation, route}) => {
         console.log('Edit mode with ID:', editData.id);
       }
 
-      // Log what we're sending
-      // console.log('FormData entries to send:');
-      // for (let pair of formDataToSend.entries()) {
-      //   console.log(pair[0] + ': ' + pair[1]);
-      // }
 
       // Determine endpoint
       const endpoint = editData
-        ? 'https://argosmob.uk/makroo/public/api/v1/tractor-deals/form/update'
-        : 'https://argosmob.uk/makroo/public/api/v1/tractor-deals/form/save';
+        ? 'https://makroomotors.com/makroo-panel/public/api/v1/tractor-deals/form/update'
+        : 'https://makroomotors.com/makroo-panel/public/api/v1/tractor-deals/form/save';
 
       console.log('Sending to endpoint:', endpoint);
 

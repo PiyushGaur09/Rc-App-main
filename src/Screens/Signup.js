@@ -111,7 +111,7 @@ const Signup = ({ navigation }) => {
       const config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'https://argosmob.uk/makroo/public/api/v1/auth/register',
+        url: 'https://makroomotors.com/makroo-panel/public/api/v1/auth/register',
         headers: {
           'Content-Type': 'multipart/form-data',
         },

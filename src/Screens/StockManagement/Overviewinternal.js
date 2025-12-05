@@ -23,7 +23,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
 
 const { width, height } = Dimensions.get('window');
-const API_MODEL_STOCKS = 'https://argosmob.uk/makroo/public/api/v1/model-stocks';
+const API_MODEL_STOCKS = 'https://makroomotors.com/makroo-panel/public/api/v1/model-stocks';
 
 const alphanumeric = s => String(s ?? '').replace(/[^a-zA-Z0-9]/g, '');
 
@@ -334,7 +334,7 @@ export default function Overviewinternal({ route }) {
           <View style={styles.modelInfoContainer}>
             {detail?.model?.model_picture ? (
               <Image
-                source={{ uri: `https://argosmob.uk/makroo/public/${detail.model.model_picture}` }}
+                source={{ uri: `https://makroomotors.com/makroo-panel/public/${detail.model.model_picture}` }}
                 style={styles.modelImage}
               />
             ) : (

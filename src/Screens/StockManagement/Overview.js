@@ -17,7 +17,7 @@ import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import axios from 'axios';
 
 const API_MODEL_STOCKS =
-  'https://argosmob.uk/makroo/public/api/v1/model-stocks';
+  'https://makroomotors.com/makroo-panel/public/api/v1/model-stocks';
 
 export default function Overview() {
   const insets = useSafeAreaInsets();
@@ -114,7 +114,7 @@ export default function Overview() {
                 {item.model_picture ? (
                   <Image
                     source={{
-                      uri: `https://argosmob.uk/makroo/public/${item.model_picture}`,
+                      uri: `https://makroomotors.com/makroo-panel/public/${item.model_picture}`,
                     }}
                     style={styles.modelImage}
                     resizeMode="cover"

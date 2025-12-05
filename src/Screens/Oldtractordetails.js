@@ -52,7 +52,7 @@ const Oldtractordetails = ({navigation}) => {
       formData.append('user_id', userId);
 
       const response = await axios.post(
-        'https://argosmob.uk/makroo/public/api/v1/tractor-deals/data/get',
+        'https://makroomotors.com/makroo-panel/public/api/v1/tractor-deals/data/get',
         formData,
         {
           headers: {
@@ -78,7 +78,7 @@ const Oldtractordetails = ({navigation}) => {
           if (item.picture && !item.picture.startsWith('http')) {
             return {
               ...item,
-              picture: `https://argosmob.uk/makroo/public/${item.picture.replace(/^\/+/, '')}`
+              picture: `https://makroomotors.com/makroo-panel/public/${item.picture.replace(/^\/+/, '')}`
             };
           }
           return item;
@@ -114,7 +114,7 @@ const Oldtractordetails = ({navigation}) => {
       setDownloadingPdf(itemId);
       
       const response = await axios.get(
-        `https://argosmob.uk/makroo/public/api/v1/tractor-deals/generate-pdf/${itemId}`,
+        `https://makroomotors.com/makroo-panel/public/api/v1/tractor-deals/generate-pdf/${itemId}`,
         {
           timeout: 30000
         }

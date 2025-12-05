@@ -19,7 +19,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_BASE = 'https://argosmob.uk/makroo/public/api/v1';
+const API_BASE = 'https://makroomotors.com/makroo-panel/public/api/v1';
 
 const numberify = s => String(s ?? '').replace(/[^\d]/g, '');
 const alphanumeric = s => String(s ?? '').replace(/[^a-zA-Z0-9]/g, '');

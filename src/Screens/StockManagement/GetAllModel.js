@@ -20,7 +20,7 @@ import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const API_URL = 'https://argosmob.uk/makroo/public/api/v1/model/tractor-models';
+const API_URL = 'https://makroomotors.com/makroo-panel/public/api/v1/model/tractor-models';
 
 // fallback placeholder image if model_picture is null
 const PLACEHOLDER_IMG = 'https://image2url.com/images/1759736975224-fc97ba4f-b1b8-4087-a3e7-64a27c57d201.png';
@@ -82,7 +82,7 @@ const GetAllModel = () => {
         onPress={() => navigation.navigate('ModelDetail', {model: item})}>
         <View style={styles.locationRow}>
           <View style={styles.imageTextContainer}>
-            <Image source={{uri: `https://argosmob.uk/makroo/public/${imageUri}`}} style={styles.tractorImage} resizeMode="cover" />
+            <Image source={{uri: `https://makroomotors.com/makroo-panel/public/${imageUri}`}} style={styles.tractorImage} resizeMode="cover" />
             <View style={styles.textContainer}>
               <Text style={styles.locationText}>{item.model_name || '-'}</Text>
               <Text style={styles.locationYear}>{item.year || '-'}</Text>

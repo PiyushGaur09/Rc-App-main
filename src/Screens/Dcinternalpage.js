@@ -26,7 +26,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Camera} from 'react-native-camera-kit';
 
 // API endpoints
-const API_BASE_URL = 'https://argosmob.uk/makroo/public/api/v1';
+const API_BASE_URL = 'https://makroomotors.com/makroo-panel/public/api/v1';
 const TRACTOR_MODELS_API = `${API_BASE_URL}/model/tractor-models`;
 
 const Dcinternalpage = ({navigation, route}) => {
@@ -166,7 +166,7 @@ const Dcinternalpage = ({navigation, route}) => {
   const makeAbsoluteUrl = relativePath => {
     if (!relativePath) return null;
     if (relativePath.startsWith('http')) return relativePath;
-    return `https://argosmob.uk/makroo/public/${relativePath.replace(/^\/+/, '')}`;
+    return `https://makroomotors.com/makroo-panel/public/${relativePath.replace(/^\/+/, '')}`;
   };
 
   // Fetch tractor models from API
@@ -243,7 +243,7 @@ const Dcinternalpage = ({navigation, route}) => {
 
       const config = {
         method: 'post',
-        url: 'https://argosmob.uk/makroo/public/api/v1/delivery-challan/form/get',
+        url: 'https://makroomotors.com/makroo-panel/public/api/v1/delivery-challan/form/get',
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -897,7 +897,7 @@ const Dcinternalpage = ({navigation, route}) => {
 
       const config = {
         method: 'post',
-        url: 'https://argosmob.uk/makroo/public/api/v1/delivery-challan/form/update',
+        url: 'https://makroomotors.com/makroo-panel/public/api/v1/delivery-challan/form/update',
         headers: {
           'Content-Type': 'multipart/form-data',
           Accept: 'application/json',
@@ -968,7 +968,7 @@ const Dcinternalpage = ({navigation, route}) => {
     try {
       const config = {
         method: 'get',
-        url: `https://argosmob.uk/makroo/public/api/v1/delivery-challan/form/generate-pdf/${existingFormId}`,
+        url: `https://makroomotors.com/makroo-panel/public/api/v1/delivery-challan/form/generate-pdf/${existingFormId}`,
         timeout: 30000,
       };
 

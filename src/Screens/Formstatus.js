@@ -18,7 +18,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const API_URL = 'https://argosmob.uk/makroo/public/api/v1/delivery-records/get';
+const API_URL = 'https://makroomotors.com/makroo-panel/public/api/v1/delivery-records/get';
 
 const Formstatus = ({navigation}) => {
   const insets = useSafeAreaInsets();

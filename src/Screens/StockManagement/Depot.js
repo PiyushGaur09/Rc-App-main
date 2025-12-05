@@ -18,7 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 
 const API_URL =
-  'https://argosmob.uk/makroo/public/api/v1/models-overview/depot_stock/detail';
+  'https://makroomotors.com/makroo-panel/public/api/v1/models-overview/depot_stock/detail';
 
 const Depot = () => {
   const insets = useSafeAreaInsets();

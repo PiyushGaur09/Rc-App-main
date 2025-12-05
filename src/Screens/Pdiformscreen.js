@@ -62,7 +62,7 @@ const Pdiformscreen = ({ navigation }) => {
       const config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'https://argosmob.uk/makroo/public/api/v1/delivery-records/get',
+        url: 'https://makroomotors.com/makroo-panel/public/api/v1/delivery-records/get',
         headers: {
           'Content-Type': 'multipart/form-data',
         },

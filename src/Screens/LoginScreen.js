@@ -66,7 +66,7 @@ const LoginScreen = ({ navigation }) => {
       // API configuration
       const config = {
         method: 'post',
-        url: 'https://argosmob.uk/makroo/public/api/v1/auth/login',
+        url: 'https://makroomotors.com/makroo-panel/public/api/v1/auth/login',
         headers: {
           'Content-Type': 'multipart/form-data',
         },

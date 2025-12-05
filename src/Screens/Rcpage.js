@@ -289,7 +289,7 @@ const Rcpage = ({navigation, route}) => {
     try {
       setLoadingModels(true);
       const response = await axios.get(
-        'https://argosmob.uk/makroo/public/api/v1/model/tractor-models',
+        'https://makroomotors.com/makroo-panel/public/api/v1/model/tractor-models',
         {
           headers: {
             Accept: 'application/json',
@@ -375,7 +375,7 @@ const Rcpage = ({navigation, route}) => {
     setSendingCustomerOtp(true);
     try {
       const response = await axios.post(
-        'https://argosmob.uk/makroo/public/api/v1/otp/send/customer',
+        'https://makroomotors.com/makroo-panel/public/api/v1/otp/send/customer',
         {
           user_id: parseInt(userId),
           phone: formData.mobileNo,
@@ -419,7 +419,7 @@ const Rcpage = ({navigation, route}) => {
     setVerifyingOtp(true);
     try {
       const response = await axios.post(
-        'https://argosmob.uk/makroo/public/api/v1/otp/verify/customer',
+        'https://makroomotors.com/makroo-panel/public/api/v1/otp/verify/customer',
         {
           user_id: parseInt(userId),
           phone: customerPhoneForOtp,
@@ -462,7 +462,7 @@ const Rcpage = ({navigation, route}) => {
     setSendingManagerOtp(true);
     try {
       const response = await axios.post(
-        'https://argosmob.uk/makroo/public/api/v1/otp/send/admin',
+        'https://makroomotors.com/makroo-panel/public/api/v1/otp/send/admin',
         {
           user_id: parseInt(userId),
         },
@@ -501,7 +501,7 @@ const Rcpage = ({navigation, route}) => {
     setVerifyingOtp(true);
     try {
       const response = await axios.post(
-        'https://argosmob.uk/makroo/public/api/v1/otp/verify/admin',
+        'https://makroomotors.com/makroo-panel/public/api/v1/otp/verify/admin',
         {
           user_id: parseInt(userId),
           otp: managerOtp,
@@ -1256,11 +1256,11 @@ const Rcpage = ({navigation, route}) => {
       let url;
 
       if (isEditMode && existingFormId) {
-        url = `https://argosmob.uk/makroo/public/api/v1/rc-no-plate-delivery/form/update`;
+        url = `https://makroomotors.com/makroo-panel/public/api/v1/rc-no-plate-delivery/form/update`;
         console.log('UPDATE REQUEST - Form ID:', existingFormId);
       } else {
         url =
-          'https://argosmob.uk/makroo/public/api/v1/rc-no-plate-delivery/form/save';
+          'https://makroomotors.com/makroo-panel/public/api/v1/rc-no-plate-delivery/form/save';
         console.log('CREATE REQUEST - New Form');
       }
 

@@ -18,7 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 
 const API_URL =
-  'https://argosmob.uk/makroo/public/api/v1/models-overview/billed/detail';
+  'https://makroomotors.com/makroo-panel/public/api/v1/models-overview/billed/detail';
 
 // Optional: colors by finance "type". Since API returns tractor models,
 // we'll default to purple if no match is found.

@@ -17,7 +17,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 
-const API_BASE = 'https://argosmob.uk/makroo/public/api/v1/models-overview';
+const API_BASE = 'https://makroomotors.com/makroo-panel/public/api/v1/models-overview';
 
 const StockLocation = () => {
   const insets = useSafeAreaInsets();

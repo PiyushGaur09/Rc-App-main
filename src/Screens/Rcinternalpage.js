@@ -125,7 +125,7 @@ const Rcinternalpage = ({navigation, route}) => {
   const makeAbsoluteUrl = (relativePath) => {
     if (!relativePath) return null;
     if (relativePath.startsWith('http')) return relativePath;
-    return `https://argosmob.uk/makroo/public/${relativePath.replace(/^\/+/, '')}`;
+    return `https://makroomotors.com/makroo-panel/public/${relativePath.replace(/^\/+/, '')}`;
   };
 
   // Get form ID from route params and fetch data
@@ -161,7 +161,7 @@ const Rcinternalpage = ({navigation, route}) => {
 
       const config = {
         method: 'post',
-        url: 'https://argosmob.uk/makroo/public/api/v1/rc-no-plate-delivery/form/get',
+        url: 'https://makroomotors.com/makroo-panel/public/api/v1/rc-no-plate-delivery/form/get',
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -761,7 +761,7 @@ const Rcinternalpage = ({navigation, route}) => {
 
       const config = {
         method: 'post',
-        url: 'https://argosmob.uk/makroo/public/api/v1/rc-no-plate-delivery/form/update',
+        url: 'https://makroomotors.com/makroo-panel/public/api/v1/rc-no-plate-delivery/form/update',
         headers: {
           'Content-Type': 'multipart/form-data',
           'Accept': 'application/json',
@@ -835,7 +835,7 @@ const Rcinternalpage = ({navigation, route}) => {
     try {
       const config = {
         method: 'get',
-        url: `https://argosmob.uk/makroo/public/api/v1/rc-no-plate-delivery/form/generate-pdf/${existingFormId}`,
+        url: `https://makroomotors.com/makroo-panel/public/api/v1/rc-no-plate-delivery/form/generate-pdf/${existingFormId}`,
         timeout: 30000,
       };
 

@@ -48,7 +48,7 @@ const Customerpaymentdetails = ({navigation, route}) => {
   const [selectedPaymentDetails, setSelectedPaymentDetails] = useState(null);
 
   // API Base URL
-  const API_BASE_URL = 'https://argosmob.uk/makroo/public/api/v1';
+  const API_BASE_URL = 'https://makroomotors.com/makroo-panel/public/api/v1';
 
   // Fetch payments from API
   const fetchPayments = useCallback(async () => {

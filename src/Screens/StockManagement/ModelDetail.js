@@ -35,14 +35,14 @@ const ModelDetail = ({ route }) => {
   const [imageUri, setImageUri] = useState(
     model.model_picture && model.model_picture.startsWith('http')
       ? model.model_picture
-      : model.model_picture ? `https://argosmob.uk/makroo/public/${model.model_picture}` : null
+      : model.model_picture ? `https://makroomotors.com/makroo-panel/public/${model.model_picture}` : null
   );
   const [localImage, setLocalImage] = useState(null); // object from image-picker
   const [uploading, setUploading] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   // Change BASE_URL if your server uses a different base path for relative images
-  const BASE_URL = 'https://argosmob.uk/makroo/public/';
+  const BASE_URL = 'https://makroomotors.com/makroo-panel/public/';
 
   const pickImage = async () => {
     try {
@@ -113,7 +113,7 @@ const ModelDetail = ({ route }) => {
       }
 
       // Build URL - using pattern you supplied. If your API expects PUT or PATCH, change method below.
-      const url = `https://argosmob.uk/makroo/public/api/v1/model/tractor-models/${model.id}`;
+      const url = `https://makroomotors.com/makroo-panel/public/api/v1/model/tractor-models/${model.id}`;
 
       // Axios config
       const config = {
@@ -173,7 +173,7 @@ const ModelDetail = ({ route }) => {
             setDeleting(true);
 
             try {
-              const url = `https://argosmob.uk/makroo/public/api/v1/model/tractor-models/${model.id}`;
+              const url = `https://makroomotors.com/makroo-panel/public/api/v1/model/tractor-models/${model.id}`;
 
               const config = {
                 method: 'delete',

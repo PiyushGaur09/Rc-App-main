@@ -163,7 +163,7 @@ const AddModel = ({navigation}) => {
 
   const pingHost = async () => {
     try {
-      const res = await fetch('https://argosmob.uk/', {method: 'GET'});
+      const res = await fetch('https://makroomotors.com/', {method: 'GET'});
       return {ok: res.ok, status: res.status};
     } catch (e) {
       return {ok: false, status: 0, error: String(e)};
@@ -225,7 +225,7 @@ const AddModel = ({navigation}) => {
       // 3) Try axios first
       try {
         const res = await axios.post(
-          'https://argosmob.uk/makroo/public/api/v1/model/tractor-models',
+          'https://makroomotors.com/makroo-panel/public/api/v1/model/tractor-models',
           body,
           {
             maxBodyLength: Infinity,
@@ -259,7 +259,7 @@ const AddModel = ({navigation}) => {
       // 4) Fallback to fetch
       try {
         const fetchRes = await fetch(
-          'https://argosmob.uk/makroo/public/api/v1/model/tractor-models',
+          'https://makroomotors.com/makroo-panel/public/api/v1/model/tractor-models',
           {
             method: 'POST',
             // Let fetch set multipart boundary automatically

@@ -26,7 +26,7 @@ const AllDelivery = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [userId, setUserId] = useState('');
 
-  const API_BASE = 'https://argosmob.uk/makroo/public/';
+  const API_BASE = 'https://makroomotors.com/makroo-panel/public/';
 
   const handleBack = () => navigation.goBack();
 

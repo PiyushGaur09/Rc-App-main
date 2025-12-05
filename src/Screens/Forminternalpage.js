@@ -24,9 +24,9 @@ import RNFS from 'react-native-fs';
 import { Buffer } from 'buffer';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 
-const API_BASE_RC = 'https://argosmob.uk/makroo/public/api/v1/rc-no-plate-delivery/form';
-const API_BASE_PDI = 'https://argosmob.uk/makroo/public/api/v1/pdi-delivery/form';
-const API_BASE_DC = 'https://argosmob.uk/makroo/public/api/v1/delivery-challan/form';
+const API_BASE_RC = 'https://makroomotors.com/makroo-panel/public/api/v1/rc-no-plate-delivery/form';
+const API_BASE_PDI = 'https://makroomotors.com/makroo-panel/public/api/v1/pdi-delivery/form';
+const API_BASE_DC = 'https://makroomotors.com/makroo-panel/public/api/v1/delivery-challan/form';
 
 const Forminternalpage = ({ navigation, route }) => {
   const { item = {} } = route.params || {};
@@ -191,7 +191,7 @@ const Forminternalpage = ({ navigation, route }) => {
   const makeAbsoluteUrl = (relativePath) => {
     if (!relativePath) return null;
     if (relativePath.startsWith('http')) return relativePath;
-    return `https://argosmob.uk/makroo/public/${relativePath.replace(/^\/+/, '')}`;
+    return `https://makroomotors.com/makroo-panel/public/${relativePath.replace(/^\/+/, '')}`;
   };
 
   const boolToYesNo = (val) => {
