@@ -1,13 +1,13 @@
-name: Build Android APK
+name: Android APK Build
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  build-android:
+  build-apk:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,25 +20,24 @@ jobs:
           node-version: 20
           cache: npm
 
+      - name: Install dependencies
+        run: npm ci
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
-      - name: Install dependencies
-        run: npm install
-
       - name: Make Gradle executable
         run: chmod +x android/gradlew
 
-      - name: Build Android Release APK
+      - name: Build Debug APK
         working-directory: android
-        run: ./gradlew assembleRelease --no-daemon
+        run: ./gradlew assembleDebug -PreactNativeArchitectures=arm64-v8a
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Makroo-RC-App-APK
-          path: android/app/build/outputs/apk/release/*.apk
-          if-no-files-found: error
+          name: Makroo-RC-App
+          path: android/app/build/outputs/apk/debug/app-debug.apk
